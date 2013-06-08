@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <cassert>
+#include <stdexcept>
 
 template <std::size_t N>
 struct varchar
@@ -39,6 +40,19 @@ struct varchar
 	{
 		return std::strncmp(data_, rhs.data(), N) != 0;
 	}
+	char operator[](std::size_t position)
+	{
+		assert(position < N && "Out of range");
+		return data_[position];
+	}
+	char at(std::size_t position)
+	{
+		if (position >= N)
+		{
+			throw std::out_of_range("Out of range");
+		}
+		return data_[position];
+	}
 	char * data()
 	{
 		return data_;
@@ -55,6 +69,14 @@ struct varchar
 	std::size_t length()
 	{
 		return std::strlen(data_);
+	}
+	char * begin()
+	{
+		return data_;
+	}
+	char * end()
+	{
+		return data_ + N;
 	}
 };
 

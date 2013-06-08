@@ -1,5 +1,7 @@
 #include <varchar/varchar.hpp>
 #include <cassert>
+#include <string>
+#include <vector>
 
 void test1()
 {
@@ -43,6 +45,85 @@ void test6()
 	assert(lhs.length() == 10);
 }
 
+void test7()
+{
+	std::string text = "hello world";
+	varchar<20> data;
+	std::copy(text.begin(), text.end(), data.begin());
+	assert(data == text.c_str());
+}
+
+void test8()
+{
+	varchar<20> data = "hello world";
+	std::vector<char> output(21, '\0');
+	std::copy(data.begin(), data.end(), output.begin());
+	assert(std::string(output.data()) == "hello world");
+}
+
+void test9()
+{
+	varchar<20> data = "hello world";
+	assert(data[0] == 'h');
+	assert(data[1] == 'e');
+	assert(data[2] == 'l');
+	assert(data[3] == 'l');
+	assert(data[4] == 'o');
+	assert(data[5] == ' ');
+	assert(data[6] == 'w');
+	assert(data[7] == 'o');
+	assert(data[8] == 'r');
+	assert(data[9] == 'l');
+	assert(data[10] == 'd');
+}
+
+void test10()
+{
+	varchar<20> data = "hello world";
+	assert(data.at(0) == 'h');
+	assert(data.at(1) == 'e');
+	assert(data.at(2) == 'l');
+	assert(data.at(3) == 'l');
+	assert(data.at(4) == 'o');
+	assert(data.at(5) == ' ');
+	assert(data.at(6) == 'w');
+	assert(data.at(7) == 'o');
+	assert(data.at(8) == 'r');
+	assert(data.at(9) == 'l');
+	assert(data.at(10) == 'd');
+}
+
+void test11()
+{
+	varchar<5> data = "1234";
+	bool got_exception;
+	try
+	{
+		(void)data.at(1234);
+		got_exception = false;
+	} catch (std::out_of_range const &)
+	{
+		got_exception = true;
+	}
+	assert(got_exception);
+}
+
+void test12()
+{
+	varchar<5> data = "1234";
+	bool got_exception;
+	try
+	{
+		(void)data.at(5);
+		got_exception = false;
+	} catch (std::out_of_range const &)
+	{
+		got_exception = true;
+	}
+	assert(got_exception);
+}
+
+
 int
 main()
 {
@@ -52,4 +133,10 @@ main()
 	test4();
 	test5();
 	test6();
+	test7();
+	test8();
+	test9();
+	test10();
+	test11();
+	test12();
 }
